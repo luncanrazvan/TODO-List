@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <title>ToDo List</title>
+        <link rel="stylesheet" href="css/style.css"> 
+        <link rel="stylesheet" href="jqueryui/jquery-ui.css">
+        <link rel="stylesheet" href="jqueryui/jquery-ui.structure.css">
+        <link rel="stylesheet" href="jqueryui/jquery-ui.theme.css">
+        <body id="body1">
+            <div align="center" id="titleDiv">
+                <h1 align="center">TODO List</h1>
+            </div>
+            <br>
+            <div align="center" id="btnAndInput">
+                <input id="inputAct"  type="text" name="whatToDo" placeholder="Insert Activity">
+                <button id="addButton" class="button"></button>
+                <button id="confirmButton" class="button"></button>
+            </div>
+            <div id="calendar">
+
+            </div>
+            <div class="button1" id="buttonShowCalendar">
+                <div id="slideAnimation"></div>
+                <a href="#">Show Calendar</a>
+            </div>
+
+            <div class="button2" id="buttonShowHelp">
+                <div id="slideAnimation"></div>
+                <a href="#">Help</a>
+            </div>
+            <div id="helpPanel">
+                <h3>Adding an activity</h3>
+                <p>In order to add an activity, first you have to press on the "Calendar" button to select a deadline for 
+                    what you want to achieve. After that
+                    you type in the text box the name of the activity. In the end, you can add it to your list by pressing the "check" button or you can
+                    revoke it by pressing the x button.
+                </p>
+                <h3>Removing an activity</h3>
+                <p>If you want to remove an activity you will have to double-click on it.</p>
+            </div>
+        </body>
+        <script src="js/jquery.js" type="text/javascript"></script>
+        <script src="jqueryui/jquery-ui.js" type="text/javascript"></script>
+        <script>
+            $(document).ready(function(){
+                $("#helpPanel").accordion({
+                    heightStyle:true,
+                    active:0,
+                    event:"mouseover",
+                    animate:1000,
+                    collapsible:true,
+                    icons:{header:"ui-icon-plus",activeHeader:"ui-icon-minus"}
+                });
+                $("#helpPanel").hide();
+                $("#addButton").button({
+                    icons:{primary:"ui-icon-close"}
+                });
+                $("#confirmButton").button({
+                    icons:{primary:"ui-icon-check"}
+                });
+                var date;
+                $("#calendar").datepicker({dateFormat:"dd-mm-yy"}).hide();
+                $("#buttonShowCalendar").click(function(){
+                    $("#calendar").datepicker().show();
+                });
+
+                $("#buttonShowHelp").click(function (){
+                    $("#helpPanel").slideToggle("slow");
+                });
+
+                $("#addButton").click(function(){
+                    $("#calendar").datepicker().hide();
+                    $("#inputAct").val("");
+                });
+
+                $("#confirmButton").click(function(){
+                        $("#calendar").change(function (){
+                            date=$(this).val();
+                        });
+                        if(date==null){
+                            alert("No deadline selected");
+                        }else{
+                            if($("#calendar").is(":visible")){
+                                var inputText=$("#inputAct").val();
+                            var newDiv=$('<div align="center" class="addedDivs"><h1>'+inputText+'<br> Deadline:'+date+'</h1></div>').hide();
+                            $("#body1").append(newDiv);
+                            newDiv.show('slow');
+                            $(newDiv).dblclick(function(){
+                                $(this).slideUp();
+                            });
+                            $("#calendar").datepicker().hide();
+                            }
+                        }
+                    });
+            });
+        </script>
+    </head>
+</html>
